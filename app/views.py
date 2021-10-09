@@ -13,6 +13,11 @@ class FileUploadView(APIView):
 
     def post(self, request):
         serializer = ExcelFileSerializer(data=request.data)
+
+        #Serializer checks if all the data is validated or not
+        # If it is valid then the data is saved
+        # If not then error is sent to the frontend
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
