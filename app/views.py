@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from app.serializers import ExcelFileSerializer
+from .tasks import analyze
 
 # Create your views here.
 class FileUploadView(APIView):
@@ -20,6 +21,7 @@ class FileUploadView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            analyze.delay(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
