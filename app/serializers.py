@@ -10,5 +10,5 @@ class ExcelFileSerializer(serializers.ModelSerializer):
 class AnalyzedFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnalyzedFile
-        fields = ['id', 'post', 'neg', 'compound']
-
+        fields = ['id', 'text', 'pos', 'neg', 'neu', 'compound']
+        read_only_fields = ['pos', 'neg', 'neu', 'compound']

@@ -2,10 +2,9 @@ import os
 from celery import shared_task
 import numpy as np
 import pandas as pd
+from app.services import get_sentiment_scores
 from sentiment import settings
 from .models import AnalyzedFile
-
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from django.db import transaction
 
@@ -20,15 +19,13 @@ def analyze(file):
     #Read the file in pandas
     df = pd.read_csv(file_path)   
 
-    sid = SentimentIntensityAnalyzer()
-    
 
     #Atomic transactions will either save all entries or none if an error occurs
     with transaction.atomic():
         for index, row in df.iterrows():
 
             #Get sentiment scores
-            sentiment_scores = sid.polarity_scores(row['text'])
+            sentiment_scores = get_sentiment_scores(row['text'])
             
             AnalyzedFile.objects.create(
                 text = row['text'],
