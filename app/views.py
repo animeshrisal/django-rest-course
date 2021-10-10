@@ -3,10 +3,12 @@ from django.http.response import Http404
 from django.shortcuts import render
 from django.views import generic
 from rest_framework import serializers
+from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.views import APIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework import status
 from rest_framework.response import Response
+from app.helpers import StandardResultsSetPagination
 from app.models import AnalyzedFile, ExcelFile
 
 from app.serializers import AnalyzedFileSerializer, ExcelFileSerializer
@@ -85,3 +87,17 @@ class ExportData(APIView):
             return Response({'message': 'Your file is being prepared. An excel file will be emailed to you shortly'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Could not find file'}, status=status.HTTP_404_NOT_FOUND)
+
+class ViewSentimentScoresView(ListAPIView):
+    serializer_class = AnalyzedFileSerializer
+    queryset = AnalyzedFile.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get(self, request, excel_id):
+        queryset = self.queryset.filter(file_id=excel_id)
+        page = self.paginate_queryset(queryset)
+
+        serializer = AnalyzedFileSerializer(page, many=True)
+        result = self.get_paginated_response(serializer.data)
+
+        return result
