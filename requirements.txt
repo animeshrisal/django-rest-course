@@ -26,3 +26,5 @@ sqlparse==0.4.2
 tqdm==4.62.3
 vine==5.0.0
 wcwidth==0.2.5
+PyJWT==2.1.0
+djangorestframework-simplejwt==4.8.0

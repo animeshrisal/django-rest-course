@@ -1,9 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 class ExcelFile(models.Model):
     file = models.FileField(upload_to='excel')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class AnalyzedFile(models.Model):
     text = models.TextField()
