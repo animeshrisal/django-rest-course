@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework import status
 from rest_framework.response import Response
-from app.models import AnalyzedFile
+from app.models import AnalyzedFile, ExcelFile
 
 from app.serializers import AnalyzedFileSerializer, ExcelFileSerializer
 from app.services import get_sentiment_scores
@@ -44,6 +44,13 @@ class UpdateSentimentText(APIView):
 
     def put(self, request, pk):
         snippet = self.get_object(pk)
+
+        excel_file = ExcelFile.objects.get(id=snippet.file_id)
+
+        #Check if the excel file belongs to the user
+        if(excel_file.user_id == request.user.id):
+            return Response({'error': 'You are not authorized to change this'}, status=status.HTTP_403_FORBIDDEN)
+
         serializer = AnalyzedFileSerializer(snippet, data=request.data)
 
         if serializer.is_valid():
