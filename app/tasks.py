@@ -4,9 +4,13 @@ import numpy as np
 import pandas as pd
 from app.services import get_sentiment_scores
 from sentiment import settings
-from .models import AnalyzedFile
+from .models import AnalyzedFile, ExcelFile
+
+from django.core.mail import EmailMessage
 
 from django.db import transaction
+
+import uuid
 
 @shared_task
 def analyze(file):
@@ -37,6 +41,36 @@ def analyze(file):
             )
 
 
+@shared_task
+def export_data(excel_file_id, user):
     
+    #Reads from database and makes a dataframe
+    df = pd.DataFrame.from_records(AnalyzedFile.objects.filter(file_id=excel_file_id).values())
     
- 
+    #Removes last column
+    df = df.iloc[:, :-1]
+
+    try:
+        email = EmailMessage(
+            'Your excel file is ready',
+            '',
+            settings.EMAIL_HOST_USER,
+            [user]
+        )
+
+        #Generate file name
+        name = uuid.uuid4()
+
+        file_path = 'media/excel/' + str(name) + '.csv'
+        
+        #Create CSV FIle
+        df.to_csv(file_path, index=False)
+
+        #Sends email
+        email.attach_file(file_path)
+        email.send()
+
+        os.remove(file_path) 
+
+    except Exception as e:
+        print(e)

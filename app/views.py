@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.http.response import Http404
 from django.shortcuts import render
 from django.views import generic
@@ -10,7 +11,9 @@ from app.models import AnalyzedFile, ExcelFile
 
 from app.serializers import AnalyzedFileSerializer, ExcelFileSerializer
 from app.services import get_sentiment_scores
-from .tasks import analyze
+from .tasks import analyze, export_data
+
+
 
 # Create your views here.
 class FileUploadView(APIView):
@@ -64,3 +67,21 @@ class UpdateSentimentText(APIView):
             return Response(serializer.data)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ExportData(APIView):
+    serializer_class = ExcelFileSerializer
+    queryset = ExcelFile.objects.all()
+
+    def does_file_exist(self, pk):
+        try:
+            value = ExcelFile.objects.get(pk=pk)
+            return True
+        except ExcelFile.DoesNotExist:
+            return False
+
+    def get(self, request, pk):
+        if self.does_file_exist(pk):
+            export_data.delay(pk, request.user.email)
+            return Response({'message': 'Your file is being prepared. An excel file will be emailed to you shortly'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Could not find file'}, status=status.HTTP_404_NOT_FOUND)
