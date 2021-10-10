@@ -26,7 +26,10 @@ def analyze(file):
     #Atomic transactions will either save all entries or none if an error occurs
     with transaction.atomic():
         for index, row in df.iterrows():
+
+            #Get sentiment scores
             sentiment_scores = sid.polarity_scores(row['text'])
+            
             AnalyzedFile.objects.create(
                 text = row['text'],
                 pos = sentiment_scores['pos'],
