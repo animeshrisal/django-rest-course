@@ -75,7 +75,7 @@ class ExportData(APIView):
     def does_file_exist(self, pk):
         try:
             value = ExcelFile.objects.get(pk=pk)
-            return True
+            return value
         except ExcelFile.DoesNotExist:
             return False
 
