@@ -12,6 +12,9 @@ from django.db import transaction
 
 import uuid
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 @shared_task
 def analyze(file):
     #Get file name
@@ -43,7 +46,8 @@ def analyze(file):
 
 @shared_task
 def export_data(excel_file_id, user):
-    
+
+    channel_layer = get_channel_layer()
     #Reads from database and makes a dataframe
     df = pd.DataFrame.from_records(AnalyzedFile.objects.filter(file_id=excel_file_id).values())
     
@@ -68,9 +72,13 @@ def export_data(excel_file_id, user):
 
         #Sends email
         email.attach_file(file_path)
-        email.send()
+        # email.send()
 
         os.remove(file_path) 
+
+        async_to_sync(channel_layer.group_send)(
+            "notification_admin", {"type": "notification.message", "message": "Your file is ready. An email has been sent to you" }
+        )
 
     except Exception as e:
         print(e)
