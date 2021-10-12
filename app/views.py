@@ -101,3 +101,17 @@ class ViewSentimentScoresView(ListAPIView):
         result = self.get_paginated_response(serializer.data)
 
         return result
+
+class ExcelFileView(ListAPIView):
+    serializer_class = ExcelFileSerializer
+    queryset = ExcelFile.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get(self, request):
+        queryset = self.queryset.filter(user_id=request.user.id)
+        page = self.paginate_queryset(queryset)
+
+        serializer = ExcelFileSerializer(page, many=True)
+        result = self.get_paginated_response(serializer.data)
+
+        return result
