@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "1a3ce334-f9e0-4073-a0f0-e23bdb937803",
+		"name": "Django Rest Course",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "File Upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/wavefunction/Documents/semantic.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/v1/upload",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODQ3MjY5LCJqdGkiOiI1MTJlZTU3MjZhZTQ0YjhhODQ4OWIzYTgxNDE2OGRlNyIsInVzZXJfaWQiOjF9.aaANCcRGaTrXDkuRlo8euMcI8oF0uQBmOIagjuz1wKs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzMzkyODIwNiwianRpIjoiNjdlNjNiY2U3MDFhNGZiOWJmYzM2YmY0YTFkYTY5MmMiLCJ1c2VyX2lkIjoxfQ.UigAmUGL4iuLWy9cQbfk0f7Huvi9DSFhx6Z_NqUAmB4",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "happy day",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/v1/update_sentiment/1/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"update_sentiment",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "test@123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/v1/token/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/v1/export_data/50/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"export_data",
+						"50",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View sentiment data",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzODc1MzY4LCJqdGkiOiJlZmNiNzBjOGYwZGU0MzdmODQxZDQwY2ZjM2M3MzdmNiIsInVzZXJfaWQiOjF9.b0_CJuYuYsrZdwei3LnXKP9sdaqYO31rarlIqtkQJ78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/v1/view_sentiment_scores/50/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"view_sentiment_scores",
+						"50",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View File",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM0MDM2OTY5LCJqdGkiOiJiMDBkZjI4NjgyZWQ0Nzc3ODNkNWIzNTNhZjg2MTk5YiIsInVzZXJfaWQiOjF9.hd4CD1XJS4uBCeui2z1q7bIHWGnE8qGV-ioVIeDjTh0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/v1/view_file/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"view_file",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
